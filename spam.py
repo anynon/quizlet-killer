@@ -14,6 +14,9 @@ class colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 requests.packages.urllib3.disable_warnings()
+def list_random(ran):
+    random.shuffle(ran)
+    return ran[0]
 def testCode(code):
 	instanceEndpoint = "https://quizlet.com/webapi/3.2/game-instances?filters={\"gameCode\":\""+code+"\",\"isInProgress\":\"true\",\"isDeleted\":\"false\"}"
 	r=requests.get(instanceEndpoint,verify=False)
@@ -38,7 +41,6 @@ async def join(code,token,sid,name):
 		await websocket.recv()
 		await websocket.send("5")
 		await websocket.send("42[\"player-join\",{\"username\":\""+name+"\",\"image\":\"https://p0.piqsels.com/preview/998/626/353/imagination-brain-key-head.jpg\"}]")
-		data=await websocket.recv()
 print("Enter PIN:")
 code=str(input())
 if(testCode(code)):
@@ -50,6 +52,6 @@ print(colors.OKBLUE,"[i]Starting spam, press CTRL+C to stop",colors.ENDC)
 while(1):
 	token=getToken()
 	sid=getSession(code,token)
-	name="Quizlet killer #"+str(random.randint(0,999999))
+	name=list_random(['kid', 'many', 'love', 'play'])
 	asyncio.get_event_loop().run_until_complete(join(code,token,sid,name))
 	print(colors.OKGREEN,"[+]Joined as:",name,colors.ENDC)
